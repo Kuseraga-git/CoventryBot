@@ -1,5 +1,5 @@
 function test(msg){
-    msg.channel.send("pong")
+    msg.channel.send(msg.author())
 }
 
 exports.test = test;
