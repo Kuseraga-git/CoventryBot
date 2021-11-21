@@ -8,7 +8,7 @@ client.login(process.env.TOKEN);
  */
 
 //const Utils = require('./Utils/test')
-const blackList = require("./../Tupper_blacklist.json");
+const blackList = require("./Tupper_blacklist.json");
 
 /**
  * Start codding
