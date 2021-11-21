@@ -1,25 +1,18 @@
 const Discord = require("discord.js");
 //const config = require("./config.json");
 const { Client, Intents } = require('discord.js');
-//const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
-//client.login(config.TOKEN);
 client.login(process.env.TOKEN);
 /** 
  * Import other file
  */
 
-const Utils = require('./Utils/test') 
+//const Utils = require('./Utils/test')
+const blackList = require("./../Tupper_blacklist.json");
 
-// That was a test
-const sadWords = ["sad", "depressed", "unhappy", "angry", "miserable"]
-const encouragements = [
-    "Cheer up!",
-    "Hang in there.",
-    "You are a great person / bot!"
-]
-  
-
+/**
+ * Start codding
+ */
 
 function getQuote() {
     return fetch("https://zenquotes.io/api/random")
@@ -36,16 +29,11 @@ client.on("ready", () => {
 })
 
 client.on("message", msg => {
-    if (msg.content === "$inspire") {
-        getQuote().then(quote => msg.channel.send(quote))
-    }
-
-    if (msg.content === "ping") {
-        Utils.test(msg)
+    // Dans channel Chat RP
+    if (msg.channelId == "763440831532761102") {
+        // Remove Blacklisted TupperBot message
+        if (msg.author.username in blackList) {
+            msg.delete()
         }
-
-    if (sadWords.some(word => msg.content.includes(word))) {
-        const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)]
-        msg.reply(encouragement)
     }
 })
