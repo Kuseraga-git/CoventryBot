@@ -16,7 +16,7 @@ const reservation = require("./Reservation.json")
  * Start codding
  */
 
-function asyncTest(){
+async function asyncTest(){
   const channel = await client.channels.fetch(884843344117788762);
 
       await channel.send('hi')
