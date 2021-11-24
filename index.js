@@ -35,15 +35,19 @@ client.on("message", msg => {
         "User": msg.author.id
       };
     
-    // convert JSON object to string
-    const data = JSON.stringify(user);
-    
-    // write JSON string to a file
-    fs.writeFile('Reservation.json', data, (err) => {
+      // convert JSON object to string
+      const data = JSON.stringify(user);
+      
+      // write JSON string to a file
+      fs.writeFile('Reservation.json', data, (err) => {
         if (err) {
             throw err;
         }
         console.log("JSON data is saved.");
-    });
+      });
+      //var mydata = JSON.parse(data);
+      const channel = await client.channels.fetch(884843344117788762);
+
+      await channel.send('hi')
     }
 })
