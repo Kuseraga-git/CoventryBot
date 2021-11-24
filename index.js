@@ -52,8 +52,8 @@ client.on("message", msg => {
         if (err) { throw err; }
         let jsFile = JSON.parse(data);
         jsFile['message'].push(nData);
-        let stringJsFile = JSON.stringify(jsFile);
-        fs.writeFileSync("Reservation.json",stringJsFile,"utf-8");
+        //let stringJsFile = JSON.stringify(jsFile);
+        fs.writeFileSync("Reservation.json",jsFile,"utf-8");
       });
 
 
