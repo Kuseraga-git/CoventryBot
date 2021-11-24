@@ -38,7 +38,7 @@ client.on("message", msg => {
           msg.delete()
       }
     }
-    if (msg.channelId == "913179876780032011" && msg.author.id != "911003008744161340") {
+    if (msg.channelId == "913179876780032011" && msg.author.id != "911003008744161340") { // Dans test && pas coventryBot
       const user = {
         "id": msg.channelId,
         "Date": msg.createdAt, //.createdTimestamp
@@ -46,15 +46,22 @@ client.on("message", msg => {
       };
     
       // convert JSON object to string
-      const data = JSON.stringify(user);
+      const nData = JSON.stringify(user);
       
-      // write JSON string to a file
-      fs.writeFile('Reservation.json', data, (err) => {
-        if (err) {
-            throw err;
-        }
-        console.log("JSON data is saved.");
+      fs.readFile('Reservation.json', (err, data) => {
+        if (err) { throw err; }
+        const jsFile = JSON.parse(data);
+        jsFile['message'].push(nData);
       });
+
+
+      // write JSON string to a file
+      // fs.writeFile('Reservation.json', data, (err) => {
+      //   if (err) {
+      //       throw err;
+      //   }
+      //   console.log("JSON data is saved.");
+      // });
       
       asyncTest()
     }
