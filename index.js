@@ -15,6 +15,12 @@ const reservation = require("./Reservation.json")
 /**
  * Start codding
  */
+
+function asyncTest(){
+  const channel = await client.channels.fetch(884843344117788762);
+
+      await channel.send('hi')
+}
   
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}!`)
@@ -46,8 +52,6 @@ client.on("message", msg => {
         console.log("JSON data is saved.");
       });
       //var mydata = JSON.parse(data);
-      const channel = await client.channels.fetch(884843344117788762);
-
-      await channel.send('hi')
+      asyncTest()
     }
 })
