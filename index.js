@@ -16,7 +16,7 @@ const reservation = require("./Reservation.json")
  * Start codding
  */
 
-async function asyncTest(mydata){
+async function asyncTest(){
   const channel = await client.channels.fetch("913179876780032011");
   let mydata = await JSON.parse(data);
   await channel.send(mydata)
@@ -52,6 +52,6 @@ client.on("message", msg => {
         console.log("JSON data is saved.");
       });
       
-      asyncTest(mydata)
+      asyncTest()
     }
 })
