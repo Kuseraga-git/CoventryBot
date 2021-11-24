@@ -34,7 +34,7 @@ client.on("message", msg => {
           msg.delete()
       }
     }
-    if (msg.channelId == "884843344117788762" && msg.author.id != "911003008744161340") {
+    if (msg.channelId == "913179876780032011" && msg.author.id != "911003008744161340") {
       const user = {
         "id": msg.channelId,
         "Date": msg.createdAt, //.createdTimestamp
