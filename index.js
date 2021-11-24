@@ -50,7 +50,7 @@ client.on("message", msg => {
       
       fs.readFile('Reservation.json', (err, data) => {
         if (err) { throw err; }
-        const jsFile = JSON.parse(data);
+        let jsFile = JSON.parse(data);
         jsFile['message'].push(nData);
       });
 
