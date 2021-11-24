@@ -16,11 +16,12 @@ const reservation = require("./Reservation.json")
  * Start codding
  */
 
-function asyncTest(){
-  fs.readFile('Reservation.json', (err, data) => {
+async function asyncTest(){
+  const channel = await client.channels.fetch("913179876780032011");
+  fs.readFile('msgs.json', (err, data) => {
     if (err) { throw err; }
     const _msgs = JSON.stringify(JSON.parse(data), null, 2);
-    message.channel.send('```json\n' + _msgs + '\n```');
+    channel.send('```json\n' + _msgs + '\n```');
     console.log(_msgs)
   });
 }
