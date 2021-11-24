@@ -20,9 +20,8 @@ async function asyncTest(){
   const channel = await client.channels.fetch("913179876780032011");
   fs.readFile('Reservation.json', (err, data) => {
     if (err) { throw err; }
-    const _msgs = JSON.parse(data);
-    channel.send('```json\n' + JSON.stringify(_msgs['Date']) + '\n```');
-    channel.send(_msgs['Date']);
+    const _msgs = JSON.stringify(JSON.parse(data), null, 2);
+    channel.send('```json\n' + _msgs + '\n```');
     console.log(_msgs)
   });
 }
