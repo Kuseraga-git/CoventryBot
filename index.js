@@ -28,10 +28,12 @@ function fetchReservation(){
         .then(messages => {
             let allMessages = {}
             messages.forEach(message => {
-                allMessages[message.id] = {
-                    "Date": Math.trunc(message.createdTimestamp / 1000),
-                    "User": message.author.id
-                }
+				if (message.id != "883674745969717298" && message.id != "883675840599166986" && message.id != "883675877098016808") {
+					allMessages[message.id] = {
+						"Date": Math.trunc(message.createdTimestamp / 1000),
+						"User": message.author.id
+					}
+				}
             })
             fs.writeFile("./Reservation.json", JSON.stringify(allMessages, null, 2), err => {
                 if (err) throw err;
@@ -73,7 +75,7 @@ let timer = setInterval(function() {
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}!`)
     fetchReservation()
-    ReservationManager()
+    // ReservationManager()
     timer
 })
 
