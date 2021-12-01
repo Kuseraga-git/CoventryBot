@@ -35,6 +35,7 @@ function fetchReservation(){
 					}
 				}
             })
+			console.log(allMessages)
             fs.writeFile("./Reservation.json", JSON.stringify(allMessages, null, 2), err => {
                 if (err) throw err;
                 console.log('Server successfully add')
