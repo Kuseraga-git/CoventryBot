@@ -16,55 +16,60 @@ const reservation = require("./Reservation.json")
  * Start codding
  */
 
-async function asyncTest(){
-  const channel = await client.channels.fetch("913179876780032011");
-  fs.readFile('Reservation.json', (err, data) => {
-    if (err) { throw err; }
-    const _msgs = JSON.stringify(JSON.parse(data), null, 2);
-    channel.send('```json\n' + _msgs + '\n```');
-    console.log(_msgs)
-  });
+ function test(){
+    let rawdata = fs.readFileSync(path.resolve(__dirname, './Reservation.json'));
+    let messagesJS = JSON.parse(rawdata);
+    var dateRM = new Date();
+    dateRM.setDate(dateRM.getDate() - 15);
+    var dateWarn = new Date();
+    dateWarn.setDate(dateWarn.getDate() - 14);
+
+    for (const [key, value] of Object.entries(messagesJS)) {
+        if (value.Date < Math.trunc(dateRM.getTime() / 1000)) {
+            client.channels.fetch(aliases.RESERVATION)
+                .then(channel => channel.messages.fetch(key).then(msg => msg.delete()))
+                .catch(console.error);
+            delete messagesJS[key]
+            fs.writeFile("./Reservation.json", JSON.stringify(messagesJS, null, 2), err => {
+                if (err) throw err;
+                console.log('Data successfully remove')
+            })
+        } else if (value.Date < Math.trunc(dateWarn.getTime() / 1000)) {
+            client.channels.fetch(aliases.RESERVATION)
+                .then(channel => channel.messages.fetch(key).then(msg => msg.reply("Vos réservations arrivent à terme, je vous invite à les renouveler :wink:\n <@&915540936182886450> ")))
+                .catch(console.error);
+        }
+    }
 }
-  
+let timer = setInterval(function() {
+  	test()
+}, 1000 * 60 * 60 * 24); // time is in milliseconds. 1000 ms * 60 sec * 15 min
+
 client.on("ready", () => {
-    console.log(`Logged in as ${client.user.tag}!`)
+	console.log(`Logged in as ${client.user.tag}!`)
+	test()
+	timer
 })
 
 client.on("message", msg => {
-    // Dans channel Chat RP
-    if (msg.channelId == "763440831532761102") {
-      // Remove Blacklisted TupperBot message
-      if (msg.author.username in blackList) {
-          msg.delete()
-      }
-    }
-    if (msg.channelId == "913179876780032011" && msg.author.id != "911003008744161340") { // Dans test && pas coventryBot
-      const user = {
-        "id": msg.channelId,
-        "Date": msg.createdAt, //.createdTimestamp
-        "User": msg.author.id
-      };
-    
-      // convert JSON object to string
-      const nData = JSON.stringify(user);
-      
-      fs.readFile('Reservation.json', (err, data) => {
-        if (err) { throw err; }
-        let jsFile = JSON.parse(data);
-        jsFile['message'].push(nData);
-        let stringJsFile = JSON.stringify(jsFile);
-        fs.writeFileSync("Reservation.json",stringJsFile,"utf-8");
-      });
+	// In Flood RP Channel
+	if (msg.channelId == aliases.FLOOD_BOT)
+		// Remove Blacklisted TupperBot message
+		if (msg.author.username in blackList)
+			msg.delete()
+	// In Reservation Channel && not CoventryBot
+	if (msg.channelId == aliases.RESERVATION && msg.author.id != aliases.LE_BOT) {
+		// Add Data to Reservation.json
+		let rawdata = fs.readFileSync(path.resolve(__dirname, './Reservation.json'));
+		let reserv = JSON.parse(rawdata);
+		reserv[msg.id] = {
+			"Date": Math.trunc(msg.createdTimestamp / 1000),
+			"User": msg.author.id
+		}
 
-
-      // write JSON string to a file
-      // fs.writeFile('Reservation.json', data, (err) => {
-      //   if (err) {
-      //       throw err;
-      //   }
-      //   console.log("JSON data is saved.");
-      // });
-      
-      asyncTest()
-    }
+		fs.writeFile("./Reservation.json", JSON.stringify(reserv, null, 2), err => {
+			if (err) throw err;
+			console.log('Server successfully add')
+		})
+	}
 })
