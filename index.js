@@ -86,7 +86,7 @@ client.on("message", msg => {
       if (msg.author.username in blackList)
           msg.delete()
     // In Reservation Channel && not CoventryBot
-    if (msg.channelId == aliases.RESERVATION && msg.author.id != aliases.LE_BOT) {
+    if (msg.channelId == aliases.RESERVATION && msg.author.id != aliases.LE_BOT && /Réservation de :/g.test(msg.content)) {
         // Add Data to Reservation.json
         let rawdata = fs.readFileSync(path.resolve(__dirname, './Reservation.json'));
         let reserv = JSON.parse(rawdata);
