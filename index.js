@@ -28,7 +28,7 @@ function fetchReservation(){
         .then(messages => {
             let allMessages = {}
             messages.forEach(message => {
-				if (message.id != "883674745969717298" && message.id != "883675840599166986" && message.id != "883675877098016808" && message.id != "883675877098016808" && /Réservation de :/g.test(message.content)) {
+				if (message.id != "883674745969717298" && message.id != "883675840599166986" && message.id != "883675877098016808" && message.id != "883675877098016808" && /Réservation de/g.test(message.content)) {
 					allMessages[message.id] = {
 						"Date": Math.trunc(message.createdTimestamp / 1000),
 						"User": message.author.id
@@ -87,7 +87,7 @@ client.on("message", msg => {
       if (msg.author.username in blackList)
           msg.delete()
     // In Reservation Channel && not CoventryBot
-    if (msg.channelId == aliases.RESERVATION && msg.author.id != aliases.LE_BOT && /Réservation de :/g.test(msg.content)) {
+    if (msg.channelId == aliases.RESERVATION && msg.author.id != aliases.LE_BOT && /Réservation de/g.test(msg.content)) {
         // Add Data to Reservation.json
         let rawdata = fs.readFileSync(path.resolve(__dirname, './Reservation.json'));
         let reserv = JSON.parse(rawdata);
