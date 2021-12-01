@@ -19,7 +19,29 @@ const reservation = require("./Reservation.json")
  * Start codding
  */
 
- function test(){
+// new Date(new Date().setDate(new Date().getDate()-2)) == Date d'il y a 2 jours
+
+// Récupère tous les message du channel Réservation
+function fetchReservation(){
+    client.channels.fetch(aliases.RESERVATION)
+    .then(channel => channel.messages.fetch({ limit: 100 })
+        .then(messages => {
+            let allMessages = {}
+            messages.forEach(message => {
+                allMessages[message.id] = {
+                    "Date": Math.trunc(message.createdTimestamp / 1000),
+                    "User": message.author.id
+                }
+            })
+            fs.writeFile("./Reservation.json", JSON.stringify(allMessages, null, 2), err => {
+                if (err) throw err;
+                console.log('Server successfully add')
+            })
+        })
+    );    
+}
+
+function ReservationManager(){
     let rawdata = fs.readFileSync(path.resolve(__dirname, './Reservation.json'));
     let messagesJS = JSON.parse(rawdata);
     var dateRM = new Date();
@@ -39,40 +61,41 @@ const reservation = require("./Reservation.json")
             })
         } else if (value.Date < Math.trunc(dateWarn.getTime() / 1000)) {
             client.channels.fetch(aliases.RESERVATION)
-                .then(channel => channel.messages.fetch(key).then(msg => msg.reply("Vos réservations arrivent à terme, je vous invite à les renouveler :wink:\n <@&915540936182886450> ")))
+                .then(channel => channel.messages.fetch(key).then(msg => msg.reply(aliases.MSG_WARN_RESERVATION)))
                 .catch(console.error);
         }
     }
 }
 let timer = setInterval(function() {
-  	test()
-}, 1000 * 60 * 60 * 24); // time is in milliseconds. 1000 ms * 60 sec * 15 min
-
+    ReservationManager()
+  }, 1000 * 60 * 60 * 24); // time is in milliseconds. 1000 ms * 60 sec * 60 min * 24 hour
+  
 client.on("ready", () => {
-	console.log(`Logged in as ${client.user.tag}!`)
-	test()
-	timer
+    console.log(`Logged in as ${client.user.tag}!`)
+    fetchReservation()
+    ReservationManager()
+    timer
 })
 
 client.on("message", msg => {
-	// In Flood RP Channel
-	if (msg.channelId == aliases.FLOOD_BOT)
-		// Remove Blacklisted TupperBot message
-		if (msg.author.username in blackList)
-			msg.delete()
-	// In Reservation Channel && not CoventryBot
-	if (msg.channelId == aliases.RESERVATION && msg.author.id != aliases.LE_BOT) {
-		// Add Data to Reservation.json
-		let rawdata = fs.readFileSync(path.resolve(__dirname, './Reservation.json'));
-		let reserv = JSON.parse(rawdata);
-		reserv[msg.id] = {
-			"Date": Math.trunc(msg.createdTimestamp / 1000),
-			"User": msg.author.id
-		}
+    // In Flood RP Channel
+    if (msg.channelId == aliases.FLOOD_BOT)
+      // Remove Blacklisted TupperBot message
+      if (msg.author.username in blackList)
+          msg.delete()
+    // In Reservation Channel && not CoventryBot
+    if (msg.channelId == aliases.RESERVATION && msg.author.id != aliases.LE_BOT) {
+        // Add Data to Reservation.json
+        let rawdata = fs.readFileSync(path.resolve(__dirname, './Reservation.json'));
+        let reserv = JSON.parse(rawdata);
+        reserv[msg.id] = {
+            "Date": Math.trunc(msg.createdTimestamp / 1000),
+            "User": msg.author.id
+        }
 
-		fs.writeFile("./Reservation.json", JSON.stringify(reserv, null, 2), err => {
-			if (err) throw err;
-			console.log('Server successfully add')
-		})
-	}
+        fs.writeFile("./Reservation.json", JSON.stringify(reserv, null, 2), err => {
+            if (err) throw err;
+            console.log('Server successfully add')
+        })
+    }
 })

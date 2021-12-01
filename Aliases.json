@@ -1,5 +1,6 @@
 {
     "FLOOD_BOT" : "763440831532761102",
     "RESERVATION" : "883672278204813323",
-    "LE_BOT" : "911003008744161340"
+    "LE_BOT" : "911003008744161340",
+    "MSG_WARN_RESERVATION" : "Votre réservation arrive à terme, je vous invite à la renouveler :wink:"
 }
