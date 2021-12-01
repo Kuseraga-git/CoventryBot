@@ -8,6 +8,8 @@ client.login(process.env.TOKEN);
  * Import other file
  */
 
+ const aliases = require("./Aliases.json")
+
 //const Utils = require('./Utils/test')
 const blackList = require("./Tupper_blacklist.json");
 const reservation = require("./Reservation.json")
