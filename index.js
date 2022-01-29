@@ -40,20 +40,30 @@ client.on("message", msg => {
     // Use cmd to create Role + add it
     if (Utils.hasPrefix(msg) && Utils.hasRights(msg.member._roles)){
         const paramArr = msg.content.split(',').map(str => str.trim())
-        let rInfo = msg.guild.roles.cache.find(r => r.id === roleManager.Nb_Player[paramArr[1].trim()])
-        let member = msg.mentions.members.first()
-        msg.guild.roles.create({
-            name: paramArr[0].replace('!cov ', ''),
-            color: roleManager.Species[paramArr[2].trim()][0],
-            position: rInfo.rawPosition - 1,
-            mentionable : true,
-            reason: 'we needed a role for Super Cool People',
-        })
-        .then(role => {
-            member.roles.add(role.id);
-        })
-        .catch(console.error);
-        Role.attributeRoles(member, msg, paramArr)
+        if (msg.guild.roles.cache.find(role => role.name === paramArr[0].replace('!cov ', '')) == undefined)
+        {
+            let rInfo = msg.guild.roles.cache.find(r => r.id === roleManager.Nb_Player[paramArr[1].trim()])
+            let member = msg.mentions.members.first()
+            msg.guild.roles.create({
+                name: paramArr[0].replace('!cov ', ''),
+                color: roleManager.Species[paramArr[2].trim()][0],
+                position: rInfo.rawPosition - 1,
+                mentionable : true,
+                reason: 'we needed a role for Super Cool People',
+            })
+            .then(role => {
+                member.roles.add(role.id);
+            })
+            .catch(console.error);
+            Role.attributeRoles(member, msg, paramArr)
+            const exampleEmbed = new MessageEmbed()
+                .setColor('#0099ff')
+                .setTitle('Role crée !')
+                .setDescription("J'ai crée et attribué les rôles du joueur o/")
+                .setTimestamp();
+
+            msg.channel.send({ embeds: [exampleEmbed] });
+        }
     }
 
     // In Flood RP Channel
