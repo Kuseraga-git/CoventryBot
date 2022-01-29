@@ -1,5 +1,5 @@
 // Récupère tous les message du channel Réservation
-function fetchReservation(){
+function fetchReservation(client){
     client.channels.fetch(aliases.RESERVATION)
     .then(channel => channel.messages.fetch({ limit: 100 })
         .then(messages => {
@@ -23,7 +23,7 @@ function fetchReservation(){
 
 // new Date(new Date().setDate(new Date().getDate()-2)) == Date d'il y a 2 jours
 
-function ReservationManager(){
+function ReservationManager(client){
     let rawdata = fs.readFileSync(path.resolve(__dirname, './Reservation.json'));
     let messagesJS = JSON.parse(rawdata);
     var dateRM = new Date();
