@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const Role = require('./Role')
 const Reservation = require('./Reservation')
 const blackList = require("./../Tupper_blacklist.json");
