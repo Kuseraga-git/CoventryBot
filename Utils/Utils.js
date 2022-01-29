@@ -1,8 +1,9 @@
-const Reservation = require('./Utils/Reservation')
-const blackList = require("./Tupper_blacklist.json");
-const roleManager = require("./Role_Manager.json")
-const reservation = require("./Reservation.json")
-const aliases = require("./Aliases.json")
+const Role = require('./Role')
+const Reservation = require('./Reservation')
+const blackList = require("./../Tupper_blacklist.json");
+const roleManager = require("./../Role_Manager.json")
+const reservation = require("./../Reservation.json")
+const aliases = require("./../Aliases.json")
 
 let prefixList = ['!cov ']
 
