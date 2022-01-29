@@ -1,3 +1,9 @@
+const Reservation = require('./Utils/Reservation')
+const blackList = require("./Tupper_blacklist.json");
+const roleManager = require("./Role_Manager.json")
+const reservation = require("./Reservation.json")
+const aliases = require("./Aliases.json")
+
 // Récupère tous les message du channel Réservation
 function fetchReservation(client){
     client.channels.fetch(aliases.RESERVATION)
