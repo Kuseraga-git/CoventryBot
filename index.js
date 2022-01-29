@@ -11,83 +11,58 @@ client.login(process.env.TOKEN);
 
  const aliases = require("./Aliases.json")
 
-//const Utils = require('./Utils/test')
+const Utils = require('./Utils/Utils')
+const Role = require('./Utils/Role')
+const Reservation = require('./Utils/Reservation')
 const blackList = require("./Tupper_blacklist.json");
+const roleManager = require("./Role_Manager.json")
 const reservation = require("./Reservation.json")
 
 /**
  * Start codding
  */
 
-// new Date(new Date().setDate(new Date().getDate()-2)) == Date d'il y a 2 jours
-
-// Récupère tous les message du channel Réservation
-function fetchReservation(){
-    client.channels.fetch(aliases.RESERVATION)
-    .then(channel => channel.messages.fetch({ limit: 100 })
-        .then(messages => {
-            let allMessages = {}
-            messages.forEach(message => {
-				if (message.id != "883674745969717298" && message.id != "883675840599166986" && message.id != "883675877098016808" && message.id != "883675877098016808" && /Réservation de/g.test(message.content)) {
-					allMessages[message.id] = {
-						"Date": Math.trunc(message.createdTimestamp / 1000),
-						"User": message.author.id
-					}
-				}
-            })
-			console.log(allMessages)
-            fs.writeFile("./Reservation.json", JSON.stringify(allMessages, null, 2), err => {
-                if (err) throw err;
-                console.log('Server successfully add')
-            })
-        })
-    );    
-}
-
-function ReservationManager(){
-    let rawdata = fs.readFileSync(path.resolve(__dirname, './Reservation.json'));
-    let messagesJS = JSON.parse(rawdata);
-    var dateRM = new Date();
-    dateRM.setDate(dateRM.getDate() - 15);
-    var dateWarn = new Date();
-    dateWarn.setDate(dateWarn.getDate() - 14);
-
-    for (const [key, value] of Object.entries(messagesJS)) {
-        if (value.Date < Math.trunc(dateRM.getTime() / 1000)) {
-            client.channels.fetch(aliases.RESERVATION)
-                .then(channel => channel.messages.fetch(key).then(msg => msg.delete()))
-                .catch(console.error);
-            delete messagesJS[key]
-            fs.writeFile("./Reservation.json", JSON.stringify(messagesJS, null, 2), err => {
-                if (err) throw err;
-                console.log('Data successfully remove')
-            })
-        } else if (value.Date < Math.trunc(dateWarn.getTime() / 1000)) {
-            client.channels.fetch(aliases.RESERVATION)
-                .then(channel => channel.messages.fetch(key).then(msg => msg.reply(aliases.MSG_WARN_RESERVATION)))
-                .catch(console.error);
-        }
-    }
-}
 let timer = setInterval(function() {
-    ReservationManager()
+    Reservation.ReservationManager()
   }, 1000 * 60 * 60 * 24); // time is in milliseconds. 1000 ms * 60 sec * 60 min * 24 hour
   
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}!`)
-    fetchReservation()
+    Reservation.fetchReservation()
     // ReservationManager()
     timer
 })
 
 client.on("message", msg => {
+    /**
+     *  Flag Manager
+     */
+    // Use cmd to create Role + add it
+    if (Utils.hasPrefix(msg) && Utils.hasRights(msg.member._roles)){
+        const paramArr = msg.content.split(',').map(str => str.trim())
+        let rInfo = msg.guild.roles.cache.find(r => r.id === roleManager.Nb_Player[paramArr[1].trim()])
+        let member = msg.mentions.members.first()
+        msg.guild.roles.create({
+            name: paramArr[0].replace('!cov ', ''),
+            color: roleManager.Species[paramArr[2].trim()][0],
+            position: rInfo.rawPosition - 1,
+            mentionable : true,
+            reason: 'we needed a role for Super Cool People',
+        })
+        .then(role => {
+            member.roles.add(role.id);
+        })
+        .catch(console.error);
+        Role.attributeRoles(member, msg, paramArr)
+    }
+
     // In Flood RP Channel
-    if (msg.channelId == aliases.FLOOD_BOT)
+    else if (msg.channelId == aliases.FLOOD_BOT)
       // Remove Blacklisted TupperBot message
       if (msg.author.username in blackList)
           msg.delete()
     // In Reservation Channel && not CoventryBot
-    if (msg.channelId == aliases.RESERVATION && msg.author.id != aliases.LE_BOT && /Réservation de/g.test(msg.content)) {
+    else if (msg.channelId == aliases.RESERVATION && msg.author.id != aliases.LE_BOT && /Réservation de/g.test(msg.content)) {
         // Add Data to Reservation.json
         let rawdata = fs.readFileSync(path.resolve(__dirname, './Reservation.json'));
         let reserv = JSON.parse(rawdata);
