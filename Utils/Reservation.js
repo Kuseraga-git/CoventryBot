@@ -15,7 +15,7 @@ function fetchReservation(client){
         .then(messages => {
             let allMessages = {}
             messages.forEach(message => {
-				if (message.id != "883674745969717298" && message.id != "883675840599166986" && message.id != "883675877098016808" && message.id != "883675877098016808" && /Réservation de/g.test(message.content)) {
+				if (message.id != "937042715311501374" && /Réservation de/g.test(message.content)) {
 					allMessages[message.id] = {
 						"Date": Math.trunc(message.createdTimestamp / 1000),
 						"User": message.author.id
