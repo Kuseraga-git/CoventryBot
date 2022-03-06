@@ -30,7 +30,7 @@ let timer = setInterval(function() {
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}!`)
     Reservation.fetchReservation(client)
-    // ReservationManager()
+    Reservation.ReservationManager(client)
     timer
 })
 
