@@ -23,7 +23,7 @@ function fetchReservation(client){
 				}
             })
 			console.log(allMessages)
-            fs.writeFile("./Reservation.json", JSON.stringify(allMessages, null, 2), err => {
+            fs.writeFile("./../Reservation.json", JSON.stringify(allMessages, null, 2), err => {
                 if (err) throw err;
                 console.log('Server successfully add')
             })
@@ -34,7 +34,7 @@ function fetchReservation(client){
 // new Date(new Date().setDate(new Date().getDate()-2)) == Date d'il y a 2 jours
 
 function ReservationManager(client){
-    let rawdata = fs.readFileSync(path.resolve(__dirname, './Reservation.json'));
+    let rawdata = fs.readFileSync(path.resolve(__dirname, './../Reservation.json'));
     let messagesJS = JSON.parse(rawdata);
     var dateRM = new Date();
     dateRM.setDate(dateRM.getDate() - 15);
@@ -47,7 +47,7 @@ function ReservationManager(client){
                 .then(channel => channel.messages.fetch(key).then(msg => msg.delete()))
                 .catch(console.error);
             delete messagesJS[key]
-            fs.writeFile("./Reservation.json", JSON.stringify(messagesJS, null, 2), err => {
+            fs.writeFile("./../Reservation.json", JSON.stringify(messagesJS, null, 2), err => {
                 if (err) throw err;
                 console.log('Data successfully remove')
             })
