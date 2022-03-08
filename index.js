@@ -68,12 +68,12 @@ client.on("message", msg => {
     }
 
     // In Flood RP Channel
-    else if (msg.channelId == aliases.FLOOD_BOT)
+    if (msg.channelId == aliases.FLOOD_BOT)
       // Remove Blacklisted TupperBot message
       if (msg.author.username in blackList)
           msg.delete()
     // In Reservation Channel && not CoventryBot
-    else if (msg.channelId == aliases.RESERVATION && msg.author.id != aliases.LE_BOT && /Réservation de/g.test(msg.content)) {
+    if (msg.channelId == aliases.RESERVATION && msg.author.id != aliases.LE_BOT && /Réservation de/g.test(msg.content)) {
         // Add Data to Reservation.json
         let rawdata = fs.readFileSync(path.resolve(__dirname, './Reservation.json'));
         let reserv = JSON.parse(rawdata);
