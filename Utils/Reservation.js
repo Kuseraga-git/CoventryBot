@@ -47,7 +47,7 @@ function ReservationManager(client){
                 .then(channel => channel.messages.fetch(key).then(msg => msg.delete()))
                 .catch(console.error);
             delete messagesJS[key]
-            fs.writeFile("./../Reservation.json", JSON.stringify(messagesJS, null, 2), err => {
+            fs.writeFile("./Reservation.json", JSON.stringify(messagesJS, null, 2), err => {
                 if (err) throw err;
                 console.log('Data successfully remove')
             })
