@@ -25,7 +25,7 @@ const reservation = require("./Reservation.json")
 
 let timer = setInterval(function() {
     Reservation.ReservationManager(client)
-  }, 1000); // time is in milliseconds. 1000 ms * 60 sec * 60 min * 24 hour
+  }, 1000 * 60 * 60 * 24); // time is in milliseconds. 1000 ms * 60 sec * 60 min * 24 hour
   
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}!`)
