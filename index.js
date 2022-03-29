@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 //const config = require("./config.json");
 const { Client, Intents } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_MESSAGES] });
 client.login(process.env.TOKEN);
 /** 
  * Import other file
