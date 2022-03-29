@@ -156,7 +156,6 @@ client.on("messageCreate", async msg => {
             "Date": Math.trunc(msg.createdTimestamp / 1000),
             "User": msg.author.id
         }
-
         fs.writeFile("./Reservation.json", JSON.stringify(reserv, null, 2), err => {
             if (err) throw err;
             console.log('Server successfully add')
