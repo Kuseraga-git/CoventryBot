@@ -59,6 +59,7 @@ client.on("message", msg => {
             }
             message.awaitReactions({ filter, max: 1, time: 120000, errors: ['time'] })
                 .then(collected => {
+                    console.log('je suis rentré ========================')
                     const reaction = collected.first()
                     const species = reaction.emoji.name
                     message.reactions.removeAll()
