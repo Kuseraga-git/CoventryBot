@@ -17,12 +17,6 @@ function attributeRoles(member, msg, number, socialClass, species){
 const roleList = [
     '<:Animorphe:958383605736960000>',
     '<:Dragon:958383697671913603>',
-    '<:Elfe:958383733004722207>'
-]
-/*
-const roleList = [
-    '<:Animorphe:958383605736960000>',
-    '<:Dragon:958383697671913603>',
     '<:Elfe:958383733004722207>',
     '<:Fee:958383756593471558>',
     '<:Kistune:958383810813259806>',
@@ -34,7 +28,7 @@ const roleList = [
     '<:Valarjar:958384093442236478>',
     '<:Vampire:958384120952651837>',
     '<:Humain:958383780186427392>'
-]*/
+]
 
 const characterNumber = [
     '1️⃣',

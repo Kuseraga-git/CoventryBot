@@ -55,11 +55,10 @@ client.on("message", msg => {
             for (const role of Role.roleList)
                 message.react(role)
             const filter = (reaction, user) => {
-                return true/*Role.roleList.includes('<:' + reaction.emoji.name + ':' + reaction.emoji.id + '>') && Utils.hasRights(reaction.message.guild.members.cache.get(user.id).roles.member._roles)*/
+                return Role.roleList.includes('<:' + reaction.emoji.name + ':' + reaction.emoji.id + '>') && Utils.hasRights(reaction.message.guild.members.cache.get(user.id).roles.member._roles)
             }
             message.awaitReactions({ filter, max: 1, time: 120000, errors: ['time'] })
                 .then(collected => {
-                    console.log('je suis rentré ========================')
                     const reaction = collected.first()
                     const species = reaction.emoji.name
                     message.reactions.removeAll()
