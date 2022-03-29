@@ -34,7 +34,89 @@ client.on("ready", () => {
     timer
 })
 
-client.on("message", msg => {
+client.on('interactionCreate', async interaction => {
+	if (interaction.isSelectMenu() && Utils.hasRights(interaction.member._roles)) {
+        const member = interaction.message.mentions.members.first()
+        switch (interaction.customId) {
+            case 'Species':
+                // console.log(interaction.member._roles)
+                let numberSaveResult = Role.characterOptions
+                //console.log(interaction)
+                for (const element of interaction.values){
+                    numberSaveResult.push({
+                        label: element,
+                        value: element,
+                        default: true
+                    })
+                }
+                const numberRow = new MessageActionRow()
+                    .addComponents(
+                        new MessageSelectMenu()
+                            .setCustomId('Number')
+                            .setMinValues(3)
+                            .setMaxValues(3)
+                            .addOptions(numberSaveResult),
+                    );
+                await interaction.reply({content: `<@${member.user.id}>`, components: [numberRow] })
+                break;
+            case 'Number':
+                let socialSaveResult = Role.socialOptions
+                //console.log(interaction.values)
+                for (const element of interaction.values){
+                    socialSaveResult.push({
+                        label: element,
+                        value: element,
+                        default: true
+                    })
+                }
+                const socialRow = new MessageActionRow()
+                    .addComponents(
+                        new MessageSelectMenu()
+                            .setCustomId('Social')
+                            .setMinValues(4)
+                            .setMaxValues(4)
+                            .addOptions(socialSaveResult),
+                    );
+                await interaction.reply({content: `<@${member.user.id}>`, components: [socialRow] })
+                break;
+                
+            case 'Social':
+                const characterName = interaction.values[0]
+                const species = interaction.values[1]
+                const number = interaction.values[2]
+                const social = interaction.values[3]
+                const channel = client.channels.cache.get(interaction.channelId)
+        
+                // msg.guild.roles.cache.find(r => r.id === roleManager.Nb_Player[number])
+                if (interaction.guild.roles.cache.find(role => role.name === characterName) == undefined)
+                {
+                    let rInfo = interaction.guild.roles.cache.find(r => r.id === roleManager.Nb_Player[number])
+                    // member
+                    interaction.guild.roles.create({
+                        name: characterName,
+                        color: roleManager.Species[species][0],
+                        position: rInfo.rawPosition - 1,
+                        mentionable : true,
+                        reason: 'we needed a role for Super Cool People',
+                    })
+                    .then(role => {
+                        member.roles.add(role.id);
+                        Role.attributeRoles(member, interaction, number, social, species)
+                        const embedMessage = new MessageEmbed()
+                            .setTitle('Role crée !')
+                            .setColor('#0099ff')
+                            .setDescription("J'ai crée et attribué les rôles du joueur o/")
+                            .setTimestamp();
+                        channel.send({embeds: [embedMessage]}).then(console.log('Role Create and set with success'))
+                    })
+                    .catch(console.error);
+                }
+                break;
+        }
+    }
+});
+
+client.on("messageCreate", async msg => {
     /**
      *  Flag Manager
      */
@@ -42,95 +124,23 @@ client.on("message", msg => {
     if (Utils.hasPrefix(msg) && Utils.hasRights(msg.member._roles) && msg.content.split(',').length == 2){
         
         const member = msg.mentions.members.first() // Get mentionned user
-        const roleName = msg.content.match(/,(.*)$/g)[0].substring(1).trim()
-
-        const channel = client.channels.cache.get(msg.channelId)
-        let embedMessage = new MessageEmbed()
-            .setColor('#0099ff')
-            .setTitle('Création du rôle')
-            .setDescription(`Quelle est la race de ${roleName}`)
-            .setTimestamp();
-
-        channel.send({ embeds: [embedMessage] }).then(message => {
-            for (const role of Role.roleList)
-                message.react(role)
-            const filter = (reaction, user) => {
-                return Role.roleList.includes('<:' + reaction.emoji.name + ':' + reaction.emoji.id + '>') && Utils.hasRights(reaction.message.guild.members.cache.get(user.id).roles.member._roles)
-            }
-            message.awaitReactions({ filter, max: 1, time: 120000, errors: ['time'] })
-                .then(collected => {
-                    const reaction = collected.first()
-                    const species = reaction.emoji.name
-                    message.reactions.removeAll()
-	                    .catch(error => console.error('Failed to clear reactions:', error));
-                    embedMessage = new MessageEmbed()
-                        .setDescription(`Un nouveau ${species} ! \nCe serait le personnage n°`)
-                    message.edit({embeds: [embedMessage]})
-                    for (const number of Role.characterNumber)
-                        message.react(number)
-                    const filter = (reaction, user) => {
-                        return ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣'].includes(reaction.emoji.name) && Utils.hasRights(reaction.message.guild.members.cache.get(user.id).roles.member._roles);
-                    }
-                    message.awaitReactions({ filter, max: 1, time: 120000, errors: ['time'] })
-                        .then(collected => {
-                            const reaction = collected.first()
-                            const number = reaction.emoji.name
-                            message.reactions.removeAll()
-	                            .catch(error => console.error('Failed to clear reactions:', error));
-                            embedMessage = new MessageEmbed()
-                                .setDescription(`Un nouveau ${species} ! \nPersonnage n°${number}\nClasse sociale du personnage ?\n💵 = Riche\n🧽 = Moyen\n🥻 = Pauvre`)
-                            message.edit({embeds: [embedMessage]})
-                            for (const socialClass of Role.socialClasses)
-                                message.react(socialClass)
-                            const filter = (reaction, user) => {
-                                return ['💵', '🧽', '🥻'].includes(reaction.emoji.name) && Utils.hasRights(reaction.message.guild.members.cache.get(user.id).roles.member._roles);
-                            }
-                            message.awaitReactions({ filter, max: 1, time: 120000, errors: ['time'] })
-                                .then(collected => {
-                                    const reaction = collected.first()
-                                    const socialClass = reaction.emoji.name
-                                    message.reactions.removeAll()
-                                        .catch(error => console.error('Failed to clear reactions:', error));
-                                    /** 
-                                     * CREATION DU ROLE
-                                    */
-                                    if (msg.guild.roles.cache.find(role => role.name === roleName) == undefined)
-                                    {
-                                        let rInfo = msg.guild.roles.cache.find(r => r.id === roleManager.Nb_Player[number])
-                                        // member
-                                        msg.guild.roles.create({
-                                            name: roleName,
-                                            color: roleManager.Species[species][0],
-                                            position: rInfo.rawPosition - 1,
-                                            mentionable : true,
-                                            reason: 'we needed a role for Super Cool People',
-                                        })
-                                        .then(role => {
-                                            member.roles.add(role.id);
-                                            Role.attributeRoles(member, msg, number, socialClass, species)
-                                            embedMessage = new MessageEmbed()
-                                                .setTitle('Role crée !')
-                                                .setDescription("J'ai crée et attribué les rôles du joueur o/")
-                                                .setTimestamp();
-                                    
-                                            message.edit({embeds: [embedMessage]}).then(console.log('Role Create and set with success'))
-                                        })
-                                        .catch(console.error);
-                                    }
-                                })
-                                .catch(collected => {
-                                    //message.reply('Not so classy man')
-                                })
-                        })
-                        .catch(collected => {
-                            message.reply('Number Fooo.')
-                        })
-                })
-                .catch(collected => {
-                    message.reply('You reacted with neither a thumbs up, nor a thumbs down.')
-                })
-        }
-    )}
+        const roleName = msg.content.match(/,(.*)$/g)[0].substring(1).trim() // Get Character Name
+        const row = new MessageActionRow()
+			.addComponents(
+				new MessageSelectMenu()
+					.setCustomId('Species')
+					.setPlaceholder('Nothing selected')
+                    .setMinValues(2)
+                    .setMaxValues(2)
+					.addOptions(Role.speciesOptions)
+                    .addOptions({
+                        label: `${roleName}`,
+                        value: `${roleName}`,
+                        default: true
+                    }),
+			);
+        await msg.reply({content: `<@${member.user.id}>`, components: [row] })
+    }
 
     // In Flood RP Channel
     if (msg.channelId == aliases.FLOOD_BOT)
