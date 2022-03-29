@@ -57,7 +57,7 @@ client.on("message", msg => {
             const filter = (reaction, user) => {
                 return Role.roleList.includes('<:' + reaction.emoji.name + ':' + reaction.emoji.id + '>') && Utils.hasRights(reaction.message.guild.members.cache.get(user.id).roles.member._roles)
             }
-            message.awaitReactions({ filter, max: 1, time: 60000, errors: ['time'] })
+            message.awaitReactions({ filter, max: 1, time: 120000, errors: ['time'] })
                 .then(collected => {
                     const reaction = collected.first()
                     const species = reaction.emoji.name
@@ -71,7 +71,7 @@ client.on("message", msg => {
                     const filter = (reaction, user) => {
                         return ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣'].includes(reaction.emoji.name) && Utils.hasRights(reaction.message.guild.members.cache.get(user.id).roles.member._roles);
                     }
-                    message.awaitReactions({ filter, max: 1, time: 60000, errors: ['time'] })
+                    message.awaitReactions({ filter, max: 1, time: 120000, errors: ['time'] })
                         .then(collected => {
                             const reaction = collected.first()
                             const number = reaction.emoji.name
