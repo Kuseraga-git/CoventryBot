@@ -81,6 +81,9 @@ client.on('interactionCreate', async interaction => {
                 break;
                 
             case 'Social':
+                console.log('========ENTRY========')
+                console.log(interaction)
+                console.log('=====================')
                 const characterName = interaction.values[0]
                 const species = interaction.values[1]
                 const number = interaction.values[2]
@@ -90,6 +93,9 @@ client.on('interactionCreate', async interaction => {
                 // msg.guild.roles.cache.find(r => r.id === roleManager.Nb_Player[number])
                 if (interaction.guild.roles.cache.find(role => role.name === characterName) == undefined)
                 {
+                    console.log('=========IF==========')
+                    console.log(interaction)
+                    console.log('=====================')
                     let rInfo = interaction.guild.roles.cache.find(r => r.id === roleManager.Nb_Player[number])
                     // member
                     interaction.guild.roles.create({
