@@ -57,7 +57,7 @@ client.on('interactionCreate', async interaction => {
                             .setMaxValues(3)
                             .addOptions(numberSaveResult),
                     );
-                await interaction.reply({content: `<@${member.user.id}>`, components: [numberRow] })
+                await interaction.channel.send({content: `<@${member.user.id}>`, components: [numberRow] })
                 break;
             case 'Number':
                 let socialSaveResult = Role.socialOptions
@@ -77,7 +77,7 @@ client.on('interactionCreate', async interaction => {
                             .setMaxValues(4)
                             .addOptions(socialSaveResult),
                     );
-                await interaction.reply({content: `<@${member.user.id}>`, components: [socialRow] })
+                await interaction.channel.send({content: `<@${member.user.id}>`, components: [socialRow] })
                 break;
                 
             case 'Social':
@@ -139,7 +139,7 @@ client.on("messageCreate", async msg => {
                         default: true
                     }),
 			);
-        await msg.reply({content: `<@${member.user.id}>`, components: [row] })
+        await msg.channel.send({content: `<@${member.user.id}>`, components: [row] })
     }
 
     // In Flood RP Channel
