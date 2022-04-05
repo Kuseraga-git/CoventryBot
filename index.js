@@ -58,33 +58,11 @@ client.on('interactionCreate', async interaction => {
                             .addOptions(numberSaveResult),
                     );
                 await interaction.channel.send({content: `<@${member.user.id}>`, components: [numberRow] })
-                break;
+            break;
             case 'Number':
-                let socialSaveResult = Role.socialOptions
-                //console.log(interaction.values)
-                for (const element of interaction.values){
-                    socialSaveResult.push({
-                        label: element,
-                        value: element,
-                        default: true
-                    })
-                }
-                const socialRow = new MessageActionRow()
-                    .addComponents(
-                        new MessageSelectMenu()
-                            .setCustomId('Social')
-                            .setMinValues(4)
-                            .setMaxValues(4)
-                            .addOptions(socialSaveResult),
-                    );
-                await interaction.channel.send({content: `<@${member.user.id}>`, components: [socialRow] })
-                break;
-                
-            case 'Social':
                 const characterName = interaction.values[0]
                 const species = interaction.values[1]
                 const number = interaction.values[2]
-                const social = interaction.values[3]
                 const channel = client.channels.cache.get(interaction.channelId)
         
                 // msg.guild.roles.cache.find(r => r.id === roleManager.Nb_Player[number])
@@ -101,7 +79,7 @@ client.on('interactionCreate', async interaction => {
                     })
                     .then(role => {
                         member.roles.add(role.id);
-                        Role.attributeRoles(member, interaction, number, social, species)
+                        Role.attributeRoles(member, interaction, number, species)
                         const embedMessage = new MessageEmbed()
                             .setTitle('Role crée !')
                             .setColor('#0099ff')
@@ -111,7 +89,7 @@ client.on('interactionCreate', async interaction => {
                     })
                     .catch(console.error);
                 }
-                break;
+            break;
         }
     }
 });

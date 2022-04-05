@@ -8,9 +8,8 @@ const roleManager = require("./../Role_Manager.json")
 const reservation = require("./../Reservation.json")
 const aliases = require("./../Aliases.json")
 
-function attributeRoles(member, msg, number, socialClass, species){
+function attributeRoles(member, msg, number, species){
     member.roles.add(msg.guild.roles.cache.find(r => r.id === roleManager.Nb_Player[number]).id);
-    member.roles.add(msg.guild.roles.cache.find(r => r.id === roleManager.Classe[number][socialClass]).id);
     member.roles.add(msg.guild.roles.cache.find(r => r.id === roleManager.Species[species][Object.keys(roleManager.Nb_Player).indexOf(number) +1]).id);
 }
 
@@ -96,22 +95,6 @@ const characterOptions = [
     }
 ]
 
-const socialOptions = [
-    {
-        label: 'Riche',
-        value: 'riche',
-    },
-    {
-        label: 'Moyen',
-        value: 'moyen',
-    },
-    {
-        label: 'Pauvre',
-        value: 'pauvre'
-    }
-]
-
-exports.socialOptions = socialOptions
 exports.characterOptions = characterOptions
 exports.speciesOptions = speciesOptions
 exports.attributeRoles = attributeRoles
