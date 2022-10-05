@@ -37,10 +37,10 @@ client.on("ready", () => {
 client.on('interactionCreate', async interaction => {
 	if (interaction.isSelectMenu() && Utils.hasRights(interaction.member._roles)) {
         const member = interaction.message.mentions.members.first()
+        const numberSaveResult = new Array(Role.characterOptions)
         switch (interaction.customId) {
             case 'Species':
                 // console.log(interaction.member._roles)
-                let numberSaveResult = Role.characterOptions
                 //console.log(interaction)
                 for (const element of interaction.values){
                     numberSaveResult.push({
@@ -49,6 +49,7 @@ client.on('interactionCreate', async interaction => {
                         default: true
                     })
                 }
+                interaction.message.delete()
                 const numberRow = new MessageActionRow()
                     .addComponents(
                         new MessageSelectMenu()
@@ -60,8 +61,8 @@ client.on('interactionCreate', async interaction => {
                 await interaction.channel.send({content: `<@${member.user.id}>`, components: [numberRow] })
             break;
             case 'Number':
-                const characterName = interaction.values[0]
                 const species = interaction.values[1]
+                const characterName = `${interaction.values[0]} | ${species}`
                 const number = interaction.values[2]
                 const channel = client.channels.cache.get(interaction.channelId)
         
@@ -89,6 +90,7 @@ client.on('interactionCreate', async interaction => {
                     })
                     .catch(console.error);
                 }
+                interaction.message.delete()
             break;
         }
     }

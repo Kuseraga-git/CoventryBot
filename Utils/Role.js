@@ -10,13 +10,18 @@ const aliases = require("./../Aliases.json")
 
 function attributeRoles(member, msg, number, species){
     member.roles.add(msg.guild.roles.cache.find(r => r.id === roleManager.Nb_Player[number]).id);
-    member.roles.add(msg.guild.roles.cache.find(r => r.id === roleManager.Species[species][Object.keys(roleManager.Nb_Player).indexOf(number) +1]).id);
+    if (number == "1")
+        member.roles.add(msg.guild.roles.cache.find(r => r.id === roleManager.Species[species][Object.keys(roleManager.Nb_Player).indexOf(number) +1]).id);
 }
 
 const speciesOptions = [
     {
         label: 'Animorphe',
         value: 'animorphe',
+    },
+    {
+        label: 'Chapardeur',
+        value: 'chapardeur',
     },
     {
         label: 'Dragon',
@@ -29,6 +34,10 @@ const speciesOptions = [
     {
         label: 'Fée',
         value: 'fee',
+    },
+    {
+        label: 'Humain',
+        value: 'humain',
     },
     {
         label: 'Kistune',
@@ -61,10 +70,6 @@ const speciesOptions = [
     {
         label: 'Vampire',
         value: 'vampire',
-    },
-    {
-        label: 'Humain',
-        value: 'humain',
     }
 ]
 
@@ -92,6 +97,10 @@ const characterOptions = [
     {
         label: 'Sixième perso',
         value: '6'
+    },
+    {
+        label: 'Pnj',
+        value: 'Pnj'
     }
 ]
 
