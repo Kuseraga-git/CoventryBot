@@ -17,59 +17,59 @@ function attributeRoles(member, msg, number, species){
 const speciesOptions = [
     {
         label: 'Animorphe',
-        value: 'animorphe',
+        value: 'Animorphe',
     },
     {
         label: 'Chapardeur',
-        value: 'chapardeur',
+        value: 'Chapardeur',
     },
     {
         label: 'Dragon',
-        value: 'dragon',
+        value: 'Dragon',
     },
     {
         label: 'Elfe',
-        value: 'elfe',
+        value: 'Elfe',
     },
     {
         label: 'Fée',
-        value: 'fee',
+        value: 'Fée',
     },
     {
         label: 'Humain',
-        value: 'humain',
+        value: 'Humain',
     },
     {
         label: 'Kistune',
-        value: 'kistune',
+        value: 'Kistune',
     },
     {
         label: 'Légende',
-        value: 'legende',
+        value: 'Légende',
     },
     {
         label: 'Lycan',
-        value: 'lycan',
+        value: 'Lycan',
     },
     {
         label: 'Nécromantien',
-        value: 'necromantien',
+        value: 'Nécromantien',
     },
     {
         label: 'Sirène',
-        value: 'sirene',
+        value: 'Sirène',
     },
     {
         label: 'Sorcier',
-        value: 'sorcier',
+        value: 'Sorcier',
     },
     {
         label: 'Valarjar',
-        value: 'valarjar',
+        value: 'Valarjar',
     },
     {
         label: 'Vampire',
-        value: 'vampire',
+        value: 'Vampire',
     }
 ]
 
